@@ -1,0 +1,37 @@
+{
+    "name": "Text Snippets",
+    "version": "0.1",
+    "manifest_version": 3,
+    "description": "insert text snippets into text field via hotkeys",
+    "permissions": ["storage", "tabs", "activeTab","scripting"],
+    "options_ui": {
+      "page": "options.html",
+      "open_in_tab": true
+    },  
+    "background":{
+        "service_worker": "./background.js",
+        "type": "module"
+    },
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "action":{
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+    {
+      "matches": ["<all_urls>"], 
+      "js": ["scripts/content.js"],
+      "css" : ["css/modal.css"]
+    }
+],
+    "commands": {
+        "insert_snippet": {
+          "suggested_key": {
+            "default": "Ctrl+Shift+Y"
+          },
+          "description": "Insert a text snippet"
+        }
+      }
+    
+}
