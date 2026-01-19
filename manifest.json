@@ -1,37 +1,51 @@
 {
-    "name": "Text Snippets",
-    "version": "0.1",
-    "manifest_version": 3,
-    "description": "insert text snippets into text field via hotkeys",
-    "permissions": ["storage", "tabs", "activeTab","scripting"],
-    "options_ui": {
-      "page": "options.html",
-      "open_in_tab": true
-    },  
-    "background":{
-        "service_worker": "./background.js",
-        "type": "module"
-    },
-    "host_permissions": [
-        "<all_urls>"
-    ],
-    "action":{
-      "default_popup": "popup.html"
-    },
-    "content_scripts": [
+  "manifest_version": 2,
+  "name": "Text Snippets",
+  "version": "0.1",
+  "description": "Insert text snippets into text field via hotkeys",
+
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "<all_urls>"
+  ],
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+
+  "content_scripts": [
     {
-      "matches": ["<all_urls>"], 
+      "matches": ["<all_urls>"],
       "js": ["scripts/content.js"],
-      "css" : ["css/modal.css"]
+      "css": ["css/modal.css"]
     }
-],
-    "commands": {
-        "insert_snippet": {
-          "suggested_key": {
-            "default": "Ctrl+Shift+Y"
-          },
-          "description": "Insert a text snippet"
-        }
-      }
-    
+  ],
+
+  "commands": {
+    "insert_snippet": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y"
+      },
+      "description": "Insert a text snippet"
+    }
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "text-snippets@test",
+      "strict_min_version": "109.0"
+    }
+  }
 }

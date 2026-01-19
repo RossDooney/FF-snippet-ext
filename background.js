@@ -1,6 +1,7 @@
 let db = null
+const runtime = typeof browser !== "undefined" ? browser.runtime : chrome.runtime;
 
-chrome.runtime.onMessage.addListener((data, sender, sendResponse) => {
+runtime.onMessage.addListener((data, sender, sendResponse) => {
   try {
     switch (data.event) {
       case "open_db":
