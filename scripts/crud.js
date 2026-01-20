@@ -23,12 +23,12 @@ document.addEventListener("click", async function (event) {
       return true;    
   }
 
-  if(elemId === "go-to-options"){
-    chrome.runtime.openOptionsPage();
-  } else if(elemId === "create_db"){
-    console.log("0")
-    await createDatabase();
-  }
+//  if(elemId === "go-to-options"){
+  //  chrome.runtime.openOptionsPage();
+  //} else if(elemId === "create_db"){
+   // console.log("0")
+   // await createDatabase();
+ // }
 })
 
 async function createDatabase() {

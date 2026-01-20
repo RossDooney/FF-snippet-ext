@@ -64,8 +64,9 @@ document.addEventListener('keydown', async function(event) {
           searchStartPoint = activeElement.selectionStart;
           cachedSnippets = await fetchAllSnippets() //replace with a cache of must used snippets later
           const rect = findCoordinates(activeElement, searchStartPoint);
-          modal = createModelAtCursor(rect);
-          modalUpdate(cachedSnippets);
+         //Modal diosabled for now
+//          modal = createModelAtCursor(rect);
+//          modalUpdate(cachedSnippets);
           console.log("search enabled at: ", searchStartPoint);
           return true;
       }
@@ -82,14 +83,15 @@ document.addEventListener('keydown', async function(event) {
         }
         try{
           snippets = await searchKeys(searchString);
-          modalUpdate(snippets);
+//          modalUpdate(snippets);
         } catch(error){
           console.error("Error on searchKeys", error.message)
         }
         return;
       }
 
-      if(currentKey === "Escape" && modal){
+      if(currentKey === "Escape" && insertSearch){
+        console.log("Search cancelled");
         resetSearch();
       }
 
@@ -103,7 +105,7 @@ document.addEventListener('keydown', async function(event) {
         }
         try{
           snippets = await searchKeys(searchString);
-          modalUpdate(snippets);
+//          modalUpdate(snippets);
         } catch(error){
           console.error("Error on searchKeys", error.message)
         }
