@@ -1,4 +1,5 @@
 let db = null;
+const runtime = typeof browser !== "undefined" ? browser.runtime : chrome.runtime
 
 async function open_db(open_db_callback, callback_params = []){
     return new Promise((resolve, reject) => {
@@ -241,9 +242,9 @@ export async function delete_snippet(snippetCode){
 
 export async function fetchSnippet(searchString) {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ event: "get", searchString }, (response) => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
+    runtime.sendMessage({ event: "get", searchString }, (response) => {
+      if (runtime.lastError) {
+        reject(runtime.lastError);
       } else {
         resolve(response);
       }
