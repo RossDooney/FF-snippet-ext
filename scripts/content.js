@@ -50,16 +50,17 @@ document.addEventListener('keydown', async function(event) {
           return;
       }
       //search not enable and search key not pressed so just exit
-      if (currentKey.charCodeAt(0) !== 47 && !insertSearch) {
+      if (currentKey.charCodeAt(0) !== 92 && !insertSearch) {
           return;
       }
+      console.log(currentKey)
       //if enter is pressed, use the current key code to find key value and update text field with it
-      if (currentKey === "Enter" && insertSearch) {
+      if ((currentKey === "Enter" || currentKey.charCodeAt(0) === 32) && insertSearch) {
         await applySnippet(activeElement);
         return;
       }
       //enable search
-      if (currentKey.charCodeAt(0) === 47 && !insertSearch) {
+      if (currentKey.charCodeAt(0) === 92 && !insertSearch) {
           insertSearch = true;
           searchStartPoint = activeElement.selectionStart;
           cachedSnippets = await fetchAllSnippets() //replace with a cache of must used snippets later
@@ -153,7 +154,7 @@ async function applySnippet(activeElement, searchString = null){
   let snippet = await fetchSnippet(searchString);
   if (snippet.snippetText) {
     const insertEnd = searchStartPoint + searchString.length + 1;
-    activeElement.setRangeText(snippet.snippetText, searchStartPoint, insertEnd, 'select');
+    activeElement.setRangeText(snippet.snippetText, searchStartPoint, insertEnd, 'end');
     updateSnippetUsed(snippet);
     resetSearch();
     return;
