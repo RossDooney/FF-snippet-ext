@@ -6,6 +6,7 @@ let modal = null
 let previousActiveElemental = null
 let selectedIndex = 0;
 
+const runtime = typeof browser !== "undefined" ? browser.runtime : chrome.runtime
 
 document.addEventListener('keydown', async function(event) {
   try {
@@ -185,10 +186,10 @@ function updateSelectedElement(modalItems){
 async function fetchAllSnippets() {
   try {
     return await new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage({ event: "get_all" }, (response) => {
-        if (chrome.runtime.lastError) {
-          console.error("Chrome runtime error in fetchAllSnippets:", chrome.runtime.lastError);
-          reject(chrome.runtime.lastError);
+      runtime.sendMessage({ event: "get_all" }, (response) => {
+        if (runtime.lastError) {
+          console.error("runtime error in fetchAllSnippets:", runtime.lastError);
+          reject(runtime.lastError);
         } else if (response.error) {
           console.error("Error returned from get_all:", response.error);
           reject(new Error(response.error));
@@ -224,9 +225,9 @@ async function getCurrentSearchString(activeElement) {
 
 async function fetchSnippet(searchString) {
     return new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage({ event: "get", searchString }, (response) => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
+      runtime.sendMessage({ event: "get", searchString }, (response) => {
+        if (runtime.lastError) {
+          reject(runtime.lastError);
         } else {
           resolve(response);
         }
@@ -236,9 +237,9 @@ async function fetchSnippet(searchString) {
 
 async function searchKeys(searchString) {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ event: "search_keys", searchString }, (response) => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
+    runtime.sendMessage({ event: "search_keys", searchString }, (response) => {
+      if (runtime.lastError) {
+        reject(runtime.lastError);
       } else {
         resolve(response);
       }
@@ -248,9 +249,9 @@ async function searchKeys(searchString) {
 
 async function updateSnippetUsed(snippet) {
     return new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage({ event: "snippetUsed", snippet }, (response) => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
+      runtime.sendMessage({ event: "snippetUsed", snippet }, (response) => {
+        if (runtime.lastError) {
+          reject(runtime.lastError);
         } else {
             resolve(response);
         }

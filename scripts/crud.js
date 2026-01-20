@@ -2,6 +2,7 @@ const createDbBtn = document.getElementById("create_db");
 const deleteDbBtn = document.getElementById("delete_db");
 const getAllBtn = document.getElementById("getAll");
 
+const runtime = typeof browser !== "undefined" ? browser.runtime : chrome.runtime
 
 document.addEventListener("click", async function (event) {
   const elemId = event.target.id;
@@ -9,7 +10,7 @@ document.addEventListener("click", async function (event) {
 
   switch(elemId){
     case "go-to-options":
-      chrome.runtime.openOptionsPage();
+      runtime.openOptionsPage();
       return true;
     case "create_db":
       await createDatabase();
@@ -32,9 +33,9 @@ document.addEventListener("click", async function (event) {
 
 async function createDatabase() {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ event: "create_db"}, (response) => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
+    runtime.sendMessage({ event: "create_db"}, (response) => {
+      if (runtime.lastError) {
+        reject(runtime.lastError);
       } else {
         resolve(response);
       }
@@ -44,9 +45,9 @@ async function createDatabase() {
 
 async function deleteDatabase() {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ event: "delete_db"}, (response) => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
+    runtime.sendMessage({ event: "delete_db"}, (response) => {
+      if (runtime.lastError) {
+        reject(runtime.lastError);
       } else {
         resolve(response);
       }
@@ -56,9 +57,9 @@ async function deleteDatabase() {
 
 async function fetchSnippet(searchString) {
     return new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage({ event: "get", searchString }, (response) => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
+      runtime.sendMessage({ event: "get", searchString }, (response) => {
+        if (runtime.lastError) {
+          reject(runtime.lastError);
         } else {
           resolve(response);
         }
@@ -68,9 +69,9 @@ async function fetchSnippet(searchString) {
 
 async function fetchAllSnippets() {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ event: "get_all"}, (response) => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
+    runtime.sendMessage({ event: "get_all"}, (response) => {
+      if (runtime.lastError) {
+        reject(runtime.lastError);
       } else {
         resolve(response);
       }
@@ -80,9 +81,9 @@ async function fetchAllSnippets() {
 
 async function insertSnippets(snippet) {
     return new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage({ event: "insert", snippet}, (response) => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
+      runtime.sendMessage({ event: "insert", snippet}, (response) => {
+        if (runtime.lastError) {
+          reject(runtime.lastError);
         } else {
           resolve(response);
         }
@@ -92,9 +93,9 @@ async function insertSnippets(snippet) {
 
 async function updateSnippet(snippet) {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ event: "update", snippet}, (response) => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
+    runtime.sendMessage({ event: "update", snippet}, (response) => {
+      if (runtime.lastError) {
+        reject(runtime.lastError);
       } else {
         resolve(response);
       }
@@ -104,9 +105,9 @@ async function updateSnippet(snippet) {
 
 async function deleteSnippet(searchString) {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ event: "delete", searchString }, (response) => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
+    runtime.sendMessage({ event: "delete", searchString }, (response) => {
+      if (runtime.lastError) {
+        reject(runtime.lastError);
       } else {
         resolve(response);
       }
