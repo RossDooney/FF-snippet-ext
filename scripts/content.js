@@ -56,6 +56,7 @@ document.addEventListener('keydown', async function(event) {
       console.log(currentKey)
       //if enter is pressed, use the current key code to find key value and update text field with it
       if ((currentKey === "Enter" || currentKey.charCodeAt(0) === 32) && insertSearch) {
+        event.preventDefault();
         await applySnippet(activeElement);
         return;
       }
