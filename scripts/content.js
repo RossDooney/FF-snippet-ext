@@ -158,10 +158,12 @@ async function applySnippet(activeElement, searchString = null, spaceKey = false
   }
   let snippet = await fetchSnippet(searchString);
   if (snippet.snippetText) {
-    const insertEnd = searchStartPoint + searchString.length + 1;
-    activeElement.setRangeText(snippet.snippetText, searchStartPoint, insertEnd, 'end');
+    const overwriteEnd = searchStartPoint + searchString.length + 1;
+    activeElement.setRangeText(snippet.snippetText, searchStartPoint, overwriteEnd, 'end');
+    
     if(spaceKey){
-      activeElement.setRangeText(" ", insertEnd + 1, insertEnd + 1, 'end');
+      const insertEnd = searchStartPoint + snippet.snippetText.length + 1;
+      activeElement.setRangeText(" ", insertEnd, insertEnd, 'end');
     }
     updateSnippetUsed(snippet);
     resetSearch();
