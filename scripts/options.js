@@ -77,6 +77,23 @@ document.addEventListener("click", async function (event) {
         element.replaceWith(createSnippetRow(snippet));
         return;
       }
+      case "downloadDB":
+        const result = await db.fetch_all_snippets();
+        const jsonResult = JSON.stringify(result, null, 2);
+        const blob = new Blob([jsonResult], { type: "application/json" });
+        console.log(blob);
+        const url = URL.createObjectURL(blob);
+        await browser.downloads.download({
+          url,
+          filename: "snippet_db.json",
+          saveAs: true
+        });
+
+        URL.revokeObjectURL(url);
+        return;
+      case "uploadDB":
+        console.log("Upload DB pressed");
+        return;
   
     default:
       // if(modal && !event.target.closest(".snippetModal")){
