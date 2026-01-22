@@ -53,9 +53,15 @@ export async function insert_snippets(snippets){
     };
     if(Array.isArray(snippets)){
       snippets.forEach(snippet => {
-        snippet.timesUsed = 0;
-        snippet.lastUsed = currentDateTime;
-        snippet.lastUpdated = currentDateTime;
+        if(!snippet.timesUsed){
+          snippet.timesUsed = 0;
+        }
+        if(!snippet.lastUsed){
+          snippet.lastUsed = currentDateTime;
+        }
+        if(!snippet.lastUpdated){
+          snippet.lastUpdated = currentDateTime;
+        }
         objectStore.add(snippet)
       })
     }

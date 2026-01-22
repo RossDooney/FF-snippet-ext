@@ -93,7 +93,24 @@ document.addEventListener("click", async function (event) {
         return;
       case "uploadDB":
         console.log("Upload DB pressed");
-        return;
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "application/json";
+        input.onchange = async () => {
+          const file = input.files[0];
+          if (!file) return;
+
+          const data = await file.text();
+          const snippets = JSON.parse(data);
+
+          // Push data into your DB
+          await db.insert_snippets(snippets);
+
+          console.log("Upload complete");
+      };
+
+      input.click();
+      return;
   
     default:
       // if(modal && !event.target.closest(".snippetModal")){
