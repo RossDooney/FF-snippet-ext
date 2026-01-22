@@ -57,7 +57,11 @@ document.addEventListener('keydown', async function(event) {
       //if enter is pressed, use the current key code to find key value and update text field with it
       if ((currentKey === "Enter" || currentKey.charCodeAt(0) === 32) && insertSearch) {
         event.preventDefault();
-        await applySnippet(activeElement);
+        if(currentKey.charCodeAt(0) === 32){
+          await applySnippet(activeElement, null, true)
+        }else{
+          await applySnippet(activeElement);
+        }
         return;
       }
       //enable search
@@ -147,7 +151,7 @@ document.addEventListener("mousedown", async function (event) {
 });
 
 
-async function applySnippet(activeElement, searchString = null){
+async function applySnippet(activeElement, searchString = null, spaceKey = false){
   
   if (!searchString){
     searchString = await getCurrentSearchString(activeElement);
@@ -156,6 +160,9 @@ async function applySnippet(activeElement, searchString = null){
   if (snippet.snippetText) {
     const insertEnd = searchStartPoint + searchString.length + 1;
     activeElement.setRangeText(snippet.snippetText, searchStartPoint, insertEnd, 'end');
+    if(spaceKey){
+      activeElement.setRangeText(" ", insertEnd + 1, insertEnd + 1, 'end');
+    }
     updateSnippetUsed(snippet);
     resetSearch();
     return;
