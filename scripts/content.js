@@ -12,38 +12,12 @@ document.addEventListener('keydown', async function(event) {
   try {
       const currentKey = event.key;
       const activeElement = document.activeElement;
-   //   const checkSelect = window.getSelection().toString(); // check to see if text is highlighted during keydown
+  //   const checkSelect = window.getSelection().toString(); // check to see if text is highlighted during keydown
 
       previousActiveElemental = document.activeElement;
       if(modal){
-        const modalItems = modal.querySelectorAll(".snippetResult");
-
-        if(event.key === "ArrowDown"){
-          if(modalItems.length === 0) return;
-            event.preventDefault(modalItems);
-            selectedIndex = (selectedIndex + 1) % modalItems.length;
-            updateSelectedElement(modalItems);
-            return;
-          } else if(event.key === "ArrowUp"){
-          if(modalItems.length === 0) return;
-            event.preventDefault(modalItems);
-            selectedIndex = (selectedIndex - 1) % modalItems.length;
-            updateSelectedElement(modalItems);
-            return;
-          } else if(event.key === "Enter" && selectedIndex >= 0){
-            if(modalItems.length === 0) return;
-            event.preventDefault(modalItems);
-
-            const selectedItem = modal.querySelector(".selected");
-            if(selectedItem){
-              //needs to be updated to pass snippet text as well so there isn't a need to get from db.
-              const snippetCode = selectedItem.querySelector(".snippetCode").textContent
-              if(snippetCode){
-                applySnippet(previousActiveElemental, snippetCode);
-              }
-              return;
-            }
-        }
+        const eventHandled = handleModalKeys(event, modal);
+        if(eventHandled) return
       }
 
       if (activeElement.tagName !== "TEXTAREA" && activeElement.tagName !== "INPUT") {
@@ -53,7 +27,7 @@ document.addEventListener('keydown', async function(event) {
       if (currentKey.charCodeAt(0) !== 92 && !insertSearch) {
           return;
       }
-      console.log(currentKey)
+     
       //if enter is pressed, use the current key code to find key value and update text field with it
       if ((currentKey === "Enter" || currentKey.charCodeAt(0) === 32) && insertSearch) {
         event.preventDefault();
@@ -71,8 +45,8 @@ document.addEventListener('keydown', async function(event) {
           cachedSnippets = await fetchAllSnippets() //replace with a cache of must used snippets later
           const rect = findCoordinates(activeElement, searchStartPoint);
          //Modal diosabled for now
-//          modal = createModelAtCursor(rect);
-//          modalUpdate(cachedSnippets);
+          modal = createModelAtCursor(rect);
+          modalUpdate(cachedSnippets);
           console.log("search enabled at: ", searchStartPoint);
           return true;
       }
@@ -89,7 +63,7 @@ document.addEventListener('keydown', async function(event) {
         }
         try{
           snippets = await searchKeys(searchString);
-//          modalUpdate(snippets);
+          modalUpdate(snippets);
         } catch(error){
           console.error("Error on searchKeys", error.message)
         }
@@ -150,6 +124,44 @@ document.addEventListener("mousedown", async function (event) {
 
 });
 
+function handleModalKeys(event, modal){
+  const modalItems = modal.querySelectorAll(".snippetResult");
+  console.log("1")
+  if(modalItems.length === 0){
+     return false
+  }
+
+  switch (event.key){          
+    case "ArrowDown":
+      event.preventDefault(modalItems);
+      selectedIndex = (selectedIndex + 1) % modalItems.length;
+      updateSelectedElement(modalItems);
+      return true;
+    
+    case "ArrowUp":
+      event.preventDefault(modalItems);
+      selectedIndex = (selectedIndex - 1) % modalItems.length;
+      updateSelectedElement(modalItems);
+      return true;
+    
+    case "Enter":
+      if(selectedIndex >= 0){
+        event.preventDefault(modalItems);
+
+        const selectedItem = modal.querySelector(".selected");
+        if(selectedItem){
+          //needs to be updated to pass snippet text as well so there isn't a need to get from db.
+          const snippetCode = selectedItem.querySelector(".snippetCode").textContent
+          if(snippetCode){
+            applySnippet(previousActiveElemental, snippetCode);
+          }
+          return true;
+        }
+      }
+    default:
+      return false;
+  }
+}
 
 async function applySnippet(activeElement, searchString = null, spaceKey = false){
   
