@@ -27,6 +27,10 @@ document.addEventListener('keydown', async function(event) {
       if (currentKey.charCodeAt(0) !== 92 && !insertSearch) {
           return;
       }
+
+      if(insertSearch){
+        handleSearchKeys(event, modal, activeElement)
+      }
      
       //if enter is pressed, use the current key code to find key value and update text field with it
       if ((currentKey === "Enter" || currentKey.charCodeAt(0) === 32) && insertSearch) {
@@ -44,7 +48,6 @@ document.addEventListener('keydown', async function(event) {
           searchStartPoint = activeElement.selectionStart;
           cachedSnippets = await fetchAllSnippets() //replace with a cache of must used snippets later
           const rect = findCoordinates(activeElement, searchStartPoint);
-         //Modal diosabled for now
           modal = createModelAtCursor(rect);
           modalUpdate(cachedSnippets);
           console.log("search enabled at: ", searchStartPoint);
@@ -162,6 +165,25 @@ function handleModalKeys(event, modal){
       return false;
   }
 }
+
+async function handleSearchKeys(event, modal, activeElement){
+  switch(event.key){       
+    case "Enter":
+    case " ":
+      event.preventDefault();
+      if(currentKey.charCodeAt(0) === 32){
+        await applySnippet(activeElement, null, true)
+      }else{
+        await applySnippet(activeElement);
+      }
+
+    case "":
+
+    default:
+      console.log("default shouldn't be hit");
+  }
+}
+
 
 async function applySnippet(activeElement, searchString = null, spaceKey = false){
   
